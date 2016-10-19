@@ -14,12 +14,17 @@ public class Person {
     private String name;
     private int age;
     private String Gender;
-    private String Level;
     private boolean patient;
-    private boolean legalIssues;
     private boolean financialIssues;
     private VitalSignHistory vitalSignHistory;
+    private Person mother;
+    private Person father;
 
+    public Person ()
+    {
+        this.vitalSignHistory = new VitalSignHistory();
+    }
+    
     public String getPersonId() {
         return personId;
     }
@@ -52,13 +57,7 @@ public class Person {
         this.Gender = Gender;
     }
 
-    public String getLevel() {
-        return Level;
-    }
-
-    public void setLevel(String Level) {
-        this.Level = Level;
-    }
+    
 
     public boolean isPatient() {
         return patient;
@@ -68,13 +67,6 @@ public class Person {
         this.patient = patient;
     }
 
-    public boolean isLegalIssues() {
-        return legalIssues;
-    }
-
-    public void setLegalIssues(boolean legalIssues) {
-        this.legalIssues = legalIssues;
-    }
 
     public boolean isFinancialIssues() {
         return financialIssues;
@@ -90,6 +82,22 @@ public class Person {
 
     public void setVitalSignHistory(VitalSignHistory vitalSignHistory) {
         this.vitalSignHistory = vitalSignHistory;
+    }
+
+    public Person getMother() {
+        return mother;
+    }
+
+    public void setMother(Person mother) {
+        this.mother = mother;
+    }
+
+    public Person getFather() {
+        return father;
+    }
+
+    public void setFather(Person father) {
+        this.father = father;
     }
 
     

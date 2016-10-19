@@ -16,6 +16,11 @@ public class Family {
     private boolean financialIssues;
     private boolean geneticIssue;
 
+    public Family()
+    {
+        this.personDirectory = new PersonDirectory();
+        
+    }
     public PersonDirectory getPersonDirectory() {
         return personDirectory;
     }

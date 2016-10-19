@@ -5,16 +5,23 @@
  */
 package Business;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Rishabh
  */
 public class Community {
     private String communityName;
-    private FamilyDirectory familyDirectory;
+    private ArrayList<House> housedirectory;
     private float Temperature;
     private float pollutionLevel;
 
+    public Community()
+    {
+        this.housedirectory = new ArrayList<House>();
+    }
+    
     public String getCommunityName() {
         return communityName;
     }
@@ -23,13 +30,15 @@ public class Community {
         this.communityName = communityName;
     }
 
-    public FamilyDirectory getFamilyDirectory() {
-        return familyDirectory;
+    public ArrayList<House> getHousedirectory() {
+        return housedirectory;
     }
 
-    public void setFamilyDirectory(FamilyDirectory familyDirectory) {
-        this.familyDirectory = familyDirectory;
+    public void setHousedirectory(ArrayList<House> housedirectory) {
+        this.housedirectory = housedirectory;
     }
+
+    
 
     public float getTemperature() {
         return Temperature;
