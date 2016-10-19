@@ -15,8 +15,8 @@ import java.util.Random;
 public class InitializePerson {
     
     private static int personID = 1;
-    long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
-    long end = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
+    public static long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
+    public static long end = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
     
     public static String generateString(Random rng, String characters, int length) {
         char[] text = new char[length];
@@ -59,6 +59,8 @@ public class InitializePerson {
             person.setAge(n);
             n = randInt(40,100);
             person.setGender("Male");
+            VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            person.setVitalSignHistory(vsh);
 
         }
         
@@ -163,7 +165,7 @@ public class InitializePerson {
 
     }
     
-    public VitalSignHistory initVitalSign(String gender){
+    public static VitalSignHistory initVitalSign(String gender,int age){
         
         Random random = new Random();
         VitalSignHistory vsh = new VitalSignHistory();
@@ -201,13 +203,13 @@ public class InitializePerson {
         
         if(gender.equalsIgnoreCase("Male")){
             CalculateMen calculateMen = new CalculateMen();
-            int riskScore = calculateMen.calculateRiskScore(vitalSign);
+            int riskScore = calculateMen.calculateRiskScore(vitalSign,age);
             vitalSign.setRiskScore(riskScore);
         }
         else
         {
             CalculateWomen calculateWomen = new CalculateWomen();
-            int riskScore = calculateWomen.calculateRiskScore(vitalSign);
+            int riskScore = calculateWomen.calculateRiskScore(vitalSign,age);
             vitalSign.setRiskScore(riskScore);
         }
         

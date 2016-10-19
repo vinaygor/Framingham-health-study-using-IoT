@@ -11,7 +11,7 @@ package Business;
  */
 public class CalculateMen {
     
-    public int calculateRiskScore(VitalSign vitalSign){
+    public int calculateRiskScore(VitalSign vitalSign, int age){
         return 0;
     }
 }
