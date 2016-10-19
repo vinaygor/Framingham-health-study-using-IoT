@@ -25,5 +25,11 @@ public class PersonDirectory {
     public void setPersonDirectory(ArrayList<Person> personDirectory) {
         this.personDirectory = personDirectory;
     }
+    
+    public Person addPerson() {
+        Person p = new Person();
+        personDirectory.add(p);
+        return p;
+    }
    
 }

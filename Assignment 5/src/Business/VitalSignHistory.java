@@ -26,5 +26,10 @@ public class VitalSignHistory {
         this.vitalSignHistory = vitalSignHistory;
     }
     
-    
+      
+    public VitalSign addVitalSign() {
+        VitalSign vitalSign = new VitalSign();
+        vitalSignHistory.add(vitalSign);
+        return vitalSign;
+    }
 }
