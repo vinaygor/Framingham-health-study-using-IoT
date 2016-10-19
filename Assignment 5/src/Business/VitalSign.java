@@ -16,9 +16,37 @@ public class VitalSign {
     private boolean smoker;
     private int diabetes;
     private int bloodPressure;
-    private int hdlCholestrol;
-    private int totalCholestrol;
-    private int riskScore;
+    private double hdlCholestrol;
+    private double totalCholestrol;
+    private double cholRiskScore;
+    private double ldlRiskScore;
+
+    public double getCholRiskScore() {
+        return cholRiskScore;
+    }
+
+    public void setCholRiskScore(double cholRiskScore) {
+        this.cholRiskScore = cholRiskScore;
+    }
+
+    public double getLdlRiskScore() {
+        return ldlRiskScore;
+    }
+
+    public void setLdlRiskScore(double ldlRiskScore) {
+        this.ldlRiskScore = ldlRiskScore;
+    }
+
+   
+
+    public double getLDLriskScore() {
+        return LDLriskScore;
+    }
+
+    public void setLDLriskScore(double LDLriskScore) {
+        this.LDLriskScore = LDLriskScore;
+    }
+    private double LDLriskScore;
 
     public Date getCreatedOn() {
         return createdOn;
@@ -52,29 +80,22 @@ public class VitalSign {
         this.bloodPressure = bloodPressure;
     }
 
-    public int getHdlCholestrol() {
+    public double getHdlCholestrol() {
         return hdlCholestrol;
     }
 
-    public void setHdlCholestrol(int hdlCholestrol) {
+    public void setHdlCholestrol(double hdlCholestrol) {
         this.hdlCholestrol = hdlCholestrol;
     }
 
-    public int getTotalCholestrol() {
+    public double getTotalCholestrol() {
         return totalCholestrol;
     }
 
-    public void setTotalCholestrol(int totalCholestrol) {
+    public void setTotalCholestrol(double totalCholestrol) {
         this.totalCholestrol = totalCholestrol;
     }
 
-    public int getRiskScore() {
-        return riskScore;
-    }
-
-    public void setRiskScore(int riskScore) {
-        this.riskScore = riskScore;
-    }
-    
+   
     
 }

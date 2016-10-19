@@ -26,8 +26,7 @@ public class PersonDirectory {
         this.personDirectory = personDirectory;
     }
     
-    public Person addPerson() {
-        Person p = new Person();
+    public Person addPerson(Person p) {
         personDirectory.add(p);
         return p;
     }

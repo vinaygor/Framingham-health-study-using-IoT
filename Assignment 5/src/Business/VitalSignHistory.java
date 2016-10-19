@@ -27,8 +27,8 @@ public class VitalSignHistory {
     }
     
       
-    public VitalSign addVitalSign() {
-        VitalSign vitalSign = new VitalSign();
+    public VitalSign addVitalSign(VitalSign vitalSign) {
+        
         vitalSignHistory.add(vitalSign);
         return vitalSign;
     }

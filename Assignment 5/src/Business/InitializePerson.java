@@ -5,6 +5,8 @@
  */
 package Business;
 
+import com.sun.org.apache.bcel.internal.generic.AALOAD;
+import com.sun.prism.impl.BaseMesh;
 import java.sql.Timestamp;
 import java.util.Random;
 
@@ -15,6 +17,8 @@ import java.util.Random;
 public class InitializePerson {
     
     private static int personID = 1;
+    private static int familyID = 1;
+    
     public static long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
     public static long end = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
     
@@ -40,9 +44,11 @@ public class InitializePerson {
         PersonDirectory personDirectory = new PersonDirectory();
         PersonDirectory grandFather = new PersonDirectory();
         PersonDirectory grandMother = new PersonDirectory();
-        PersonDirectory Father = new PersonDirectory();
-        PersonDirectory Mother = new PersonDirectory();
+        PersonDirectory father = new PersonDirectory();
+        PersonDirectory mother = new PersonDirectory();
         PersonDirectory child = new PersonDirectory();
+        
+        FamilyDirectory familyDirectory = new FamilyDirectory();
         Random rand = new Random();
 
         //There are two ways presented in here for random string generation you can use whatever you feel is right.
@@ -51,7 +57,7 @@ public class InitializePerson {
         String[] gender = {"Male","Female"};
 
         for (int i = 0; i < 300; i++) {
-            Person person = grandFather.addPerson();
+            Person person = new Person();
             person.setPersonId(Integer.toString(personID++));
             String name = generateString(rand, myCharacters, 4);
             person.setName(name);
@@ -61,11 +67,11 @@ public class InitializePerson {
             person.setGender("Male");
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
             person.setVitalSignHistory(vsh);
-
+            grandFather.addPerson(person);
         }
         
         for (int i = 0; i < 300; i++) {
-            Person person = grandMother.addPerson();
+            Person person = new Person();
             person.setPersonId(Integer.toString(personID++));
             //String name = generateString(rand, myCharacters, 4);
             //You can use this as well for user freindly names
@@ -75,11 +81,11 @@ public class InitializePerson {
             person.setAge(n);
             n = randInt(40,100);
             person.setGender("Female");
-
+            grandMother.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
-            Person person = Father.addPerson();
+            Person person = new Person();
             person.setPersonId(Integer.toString(personID++));
             String name = generateString(rand, myCharacters, 4);
             person.setName(name);
@@ -97,10 +103,12 @@ public class InitializePerson {
             Person temp1= grandMother.getPersonDirectory().get(index);
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
+            
+            father.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
-            Person person = Mother.addPerson();
+            Person person = new Person();
             person.setPersonId(Integer.toString(personID++));
             String name = generateString(rand, myCharacters, 4);
             person.setName(name);
@@ -118,10 +126,12 @@ public class InitializePerson {
             Person temp1= grandMother.getPersonDirectory().get(index);
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
+            
+            mother.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
-            Person person = child.addPerson();
+            Person person = new Person();
             
             person.setPersonId(Integer.toString(personID++));
             
@@ -137,16 +147,23 @@ public class InitializePerson {
             int genderSelect = rand.nextInt(gender.length);
             person.setGender(gender[genderSelect]);
             
-            int index = rand.nextInt(Father.getPersonDirectory().size());
-            Person temp= Father.getPersonDirectory().get(index);
+            int index = rand.nextInt(father.getPersonDirectory().size());
+            Person temp= father.getPersonDirectory().get(index);
             person.setFather(temp);
-            Father.getPersonDirectory().remove(index);
+            father.getPersonDirectory().remove(index);
             
             
-            int index1 = rand.nextInt(Mother.getPersonDirectory().size());
-            Person temp1= Mother.getPersonDirectory().get(index);
+            int index1 = rand.nextInt(mother.getPersonDirectory().size());
+            Person temp1= mother.getPersonDirectory().get(index);
             person.setMother(temp1);
-            Mother.getPersonDirectory().remove(index1);
+            mother.getPersonDirectory().remove(index1);
+            child.addPerson(person);
+            
+            //Adding family members starting from children
+            Family family = new Family();
+            family.setFamilyId(Integer.toString(familyID++));
+            
+            
         }
         try{
         Person temp = child.getPersonDirectory().get(0);
@@ -172,7 +189,7 @@ public class InitializePerson {
         
         
         for(int i=0;i<5;i++){
-        VitalSign vitalSign = vsh.addVitalSign();
+        VitalSign vitalSign = new VitalSign();
         //A systolic blood pressure of 120 to 139 means you have prehypertension, or borderline high blood pressure. 
         //Even people with prehypertension are at a higher risk of developing heart disease. 
         //A systolic blood pressure number of 140 or higher is considered to be hypertension, or high blood pressure.
@@ -203,16 +220,16 @@ public class InitializePerson {
         
         if(gender.equalsIgnoreCase("Male")){
             CalculateMen calculateMen = new CalculateMen();
-            int riskScore = calculateMen.calculateRiskScore(vitalSign,age);
-            vitalSign.setRiskScore(riskScore);
+            vitalSign = calculateMen.calculateRiskScore(vitalSign,age);
+           // vitalSign.setRiskScore(riskScore);
         }
         else
         {
             CalculateWomen calculateWomen = new CalculateWomen();
-            int riskScore = calculateWomen.calculateRiskScore(vitalSign,age);
-            vitalSign.setRiskScore(riskScore);
+            vitalSign = calculateWomen.calculateRiskScore(vitalSign,age);
+        //    vitalSign.setRiskScore(riskScore);
         }
-        
+        vsh.addVitalSign(vitalSign);
         }
         return vsh;
     }
