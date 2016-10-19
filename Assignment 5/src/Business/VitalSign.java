@@ -14,7 +14,7 @@ import java.util.Date;
 public class VitalSign {
     private Date createdOn;
     private boolean smoker;
-    private int diabetes;
+    private boolean diabetes;
     private int bloodPressure;
     private double hdlCholestrol;
     private double totalCholestrol;
@@ -64,13 +64,15 @@ public class VitalSign {
         this.smoker = smoker;
     }
 
-    public int getDiabetes() {
+    public boolean isDiabetes() {
         return diabetes;
     }
 
-    public void setDiabetes(int diabetes) {
+    public void setDiabetes(boolean diabetes) {
         this.diabetes = diabetes;
     }
+
+    
 
     public int getBloodPressure() {
         return bloodPressure;

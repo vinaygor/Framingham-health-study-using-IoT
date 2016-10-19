@@ -199,7 +199,7 @@ public class InitializePerson {
         Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
         vitalSign.setCreatedOn(rand);
         
-        int selectDiabetes = random.nextInt(2);
+        boolean selectDiabetes = random.nextBoolean();
         vitalSign.setDiabetes(selectDiabetes);
         //HDL cholesterol levels greater than 60 milligrams per deciliter (mg/dL) are high. ... 
         //HDL cholesterol levels less than 40 mg/dL are low. 
