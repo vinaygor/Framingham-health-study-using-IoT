@@ -87,6 +87,7 @@ public class CalculateMen {
         NavigableMap<Boolean,Integer> diabetesMap = new TreeMap<Boolean,Integer>();
             diabetesMap.put(false,0);
             diabetesMap.put(true,2);
+            
         ldlRiskScore= ldlRiskScore + diabetesMap.get(diabetesMap.floorKey(vitalSign.isDiabetes()));
         cholRiskScore = cholRiskScore + diabetesMap.get(diabetesMap.floorKey(vitalSign.isDiabetes()));    
             
@@ -115,7 +116,7 @@ public class CalculateMen {
             ldlRiskPercentageMap.put(12.0,40);
             ldlRiskPercentageMap.put(13.0,47);
             ldlRiskPercentageMap.put(14.0,56);
-         ldlRiskScore= ldlRiskScore + ldlRiskPercentageMap.get(ldlRiskPercentageMap.floorKey(ldlRiskScore));   
+      int   ldlPercentage= ldlRiskPercentageMap.get(ldlRiskPercentageMap.floorKey(ldlRiskScore));   
             
         NavigableMap<Double,Integer> chdCholRiskPercentageMap = new TreeMap<Double,Integer>();
             chdCholRiskPercentageMap.put(-10.0,2);
@@ -134,7 +135,7 @@ public class CalculateMen {
             chdCholRiskPercentageMap.put(12.0,37);
             chdCholRiskPercentageMap.put(13.0,45);
             chdCholRiskPercentageMap.put(14.0,53);    
-        cholRiskScore = cholRiskScore + chdCholRiskPercentageMap.get(chdCholRiskPercentageMap.floorKey(cholRiskScore));
+       int  cholPercentage = chdCholRiskPercentageMap.get(chdCholRiskPercentageMap.floorKey(cholRiskScore));
         
         vitalSign.setLdlRiskScore(ldlRiskScore);
         vitalSign.setCholRiskScore(cholRiskScore);
