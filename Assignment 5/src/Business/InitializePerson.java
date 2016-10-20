@@ -18,9 +18,13 @@ public class InitializePerson {
     
     private static int personID = 1;
     private static int familyID = 1;
+    private static int houseID = 1;
+    
+    
     
     public static long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
     public static long end = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
+    
     
     public static String generateString(Random rng, String characters, int length) {
         char[] text = new char[length];
@@ -47,6 +51,19 @@ public class InitializePerson {
         PersonDirectory father = new PersonDirectory();
         PersonDirectory mother = new PersonDirectory();
         PersonDirectory child = new PersonDirectory();
+        HouseDirectory houseDirectory = new HouseDirectory();
+        City city = new City();
+        CommunityDirectory communityDirectory= new CommunityDirectory();
+        Community community1 = new Community();
+        Community community2 = new Community();
+        
+        community1.setCommunityName("Roxbury");
+        community1.setPollutionLevel(19);
+        community1.setTemperature(66);
+        
+        community2.setCommunityName("BackBay");
+        community2.setPollutionLevel(29);
+        community2.setTemperature(69);
         
         FamilyDirectory familyDirectory = new FamilyDirectory();
         Random rand = new Random();
@@ -81,6 +98,8 @@ public class InitializePerson {
             person.setAge(n);
             n = randInt(40,100);
             person.setGender("Female");
+            VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            person.setVitalSignHistory(vsh);
             grandMother.addPerson(person);
         }
         
@@ -93,7 +112,9 @@ public class InitializePerson {
             person.setAge(n);
             n = randInt(40,100);
             person.setGender("Male");
-        
+            VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            person.setVitalSignHistory(vsh);
+            
             int index = rand.nextInt(grandFather.getPersonDirectory().size());
             Person temp= grandFather.getPersonDirectory().get(index);
             person.setFather(temp);
@@ -116,6 +137,8 @@ public class InitializePerson {
             person.setAge(n);
             n = randInt(40,100);
             person.setGender("Female");
+            VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            person.setVitalSignHistory(vsh);
             
             int index = rand.nextInt(grandFather.getPersonDirectory().size());
             Person temp= grandFather.getPersonDirectory().get(index);
@@ -132,6 +155,7 @@ public class InitializePerson {
         
         for (int i = 0; i < 150; i++) {
             Person person = new Person();
+            House house = new House();
             
             person.setPersonId(Integer.toString(personID++));
             
@@ -146,6 +170,9 @@ public class InitializePerson {
             
             int genderSelect = rand.nextInt(gender.length);
             person.setGender(gender[genderSelect]);
+            
+            VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            person.setVitalSignHistory(vsh);
             
             int index = rand.nextInt(father.getPersonDirectory().size());
             Person temp= father.getPersonDirectory().get(index);
@@ -163,17 +190,101 @@ public class InitializePerson {
             Family family = new Family();
             family.setFamilyId(Integer.toString(familyID++));
             
+            //Adding child into the family
+            family.getPersonDirectory().addPerson(person);
             
+            //Adding child's Parents
+            if(!person.getFather().equals(null) &&  !person.getMother().equals(null)){
+                family.getPersonDirectory().addPerson(person.getFather());
+                family.getPersonDirectory().addPerson(person.getMother());
+                
+                //Adding Father's Parents
+                if(!person.getFather().getFather().equals(null) && !person.getFather().getMother().equals(null)){
+                    family.getPersonDirectory().addPerson(person.getFather().getFather());
+                    family.getPersonDirectory().addPerson(person.getFather().getMother());
+                }
+                
+                //Adding Mother's Parents
+                if(!person.getMother().getFather().equals(null) && !person.getMother().getMother().equals(null)){
+                    family.getPersonDirectory().addPerson(person.getMother().getFather());
+                    family.getPersonDirectory().addPerson(person.getMother().getMother());
+                }
+            }
+            
+            familyDirectory.addfamily(family);
+            house.setFamilyDirectory(familyDirectory);
+            house.setHouseId(houseID++);
+            houseDirectory.addHouse(house);
+                       
         }
-        try{
-        Person temp = child.getPersonDirectory().get(0);
-        System.out.println("Child Name "+temp.getName());
-        System.out.println("Father Name "+temp.getFather().getName());
-        System.out.println("Mother Name "+temp.getMother().getName());
-
-        System.out.println("Child Gender 1: "+temp.getGender());
-        System.out.println("Child Gender 2: "+child.getPersonDirectory().get(1).getGender());
+        int count =0;
+        HouseDirectory tempDir = new HouseDirectory();
+        for(int i =0;i<(houseDirectory.getHousedirectory().size()/2);i++){
+            tempDir.addHouse(houseDirectory.getHousedirectory().get(i));
+            count++;
+        }
         
+        HouseDirectory tempDir1 = new HouseDirectory();
+        for(int i =count;i<(houseDirectory.getHousedirectory().size());i++){
+            tempDir1.addHouse(houseDirectory.getHousedirectory().get(i));
+        }
+        
+        community1.setHouseDirectory(tempDir);
+        community2.setHouseDirectory(tempDir1);
+        
+        communityDirectory.addCommunity(community1);
+        communityDirectory.addCommunity(community2);
+        
+        city.addCommunityDir(communityDirectory);
+        city.setCityName("Boston");
+        
+        try{
+            
+            System.out.println("City Name :"+city.getCityName());
+            
+            for(CommunityDirectory community: city.getCommunityList()){
+                System.out.println("City Community "+community.getCommunityDirectory().size());
+                
+            }                
+            
+            
+            
+            
+         for(Family f : familyDirectory.getFamilyDirectory()){
+             System.out.println("");
+            System.out.println("Family Name "+f.getFamilyId());
+            System.out.println("Family Members count "+f.getPersonDirectory().getPersonDirectory().size());
+            System.out.println("Child's Person ID "+f.getPersonDirectory().getPersonDirectory().get(0).getPersonId());
+            System.out.println("Child Name : "+ f.getPersonDirectory().getPersonDirectory().get(0).getName());
+            System.out.println("Child's Father Name : "+ f.getPersonDirectory().getPersonDirectory().get(1).getName());
+            System.out.println("Child's Mother Name : "+ f.getPersonDirectory().getPersonDirectory().get(2).getName());
+            System.out.println("-----------------------------------------------------------------");
+            System.out.println("Child's Vital Details");
+            System.out.println("*************************************");
+             System.out.println();
+             System.out.println("Gender :"+f.getPersonDirectory().getPersonDirectory().get(0).getGender());
+             System.out.println("Child's Age :"+f.getPersonDirectory().getPersonDirectory().get(0).getAge());
+             System.out.println("Diabetes :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isDiabetes());
+             System.out.println("Smoker :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isSmoker());
+             System.out.println("Blood Pressure :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getBloodPressure());
+             System.out.println("HDL colestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
+             System.out.println("Total Cholestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getTotalCholestrol());
+             System.out.println("");
+             System.out.println("LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getLdlRiskScore());
+             System.out.println("HDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
+             System.out.println("______________________________________________________");
+         }
+         
+         
+//        
+//        Person temp = child.getPersonDirectory().get(0);
+//        System.out.println("Child Name "+temp.getName());
+//        System.out.println("Father Name "+temp.getFather().getName());
+//        System.out.println("Mother Name "+temp.getMother().getName());
+//
+//        System.out.println("Child Gender 1: "+temp.getGender());
+//        System.out.println("Child Gender 2: "+child.getPersonDirectory().get(1).getGender());
+//        
         }
         catch(Exception e){
             
@@ -194,7 +305,7 @@ public class InitializePerson {
         //Even people with prehypertension are at a higher risk of developing heart disease. 
         //A systolic blood pressure number of 140 or higher is considered to be hypertension, or high blood pressure.
         //
-        vitalSign.setBloodPressure(randInt(110, 150));
+        vitalSign.setBloodPressure(randInt(110, 165));
         long diff = end - offset + 1;
         Timestamp rand = new Timestamp(offset + (long)(Math.random() * diff));
         vitalSign.setCreatedOn(rand);
@@ -223,7 +334,7 @@ public class InitializePerson {
             vitalSign = calculateMen.calculateRiskScore(vitalSign,age);
            // vitalSign.setRiskScore(riskScore);
         }
-        else
+        if(gender.equalsIgnoreCase("Female"))
         {
             CalculateWomen calculateWomen = new CalculateWomen();
             vitalSign = calculateWomen.calculateRiskScore(vitalSign,age);

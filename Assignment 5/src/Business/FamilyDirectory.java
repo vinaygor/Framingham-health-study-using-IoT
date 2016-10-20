@@ -26,6 +26,8 @@ public class FamilyDirectory {
         this.familyDirectory = familyDirectory;
     }
     
-    
+      public void addfamily(Family family) {
+        familyDirectory.add(family);
+    }
     
 }

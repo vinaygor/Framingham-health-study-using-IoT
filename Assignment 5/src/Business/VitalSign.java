@@ -16,8 +16,8 @@ public class VitalSign {
     private boolean smoker;
     private boolean diabetes;
     private int bloodPressure;
-    private double hdlCholestrol;
-    private double totalCholestrol;
+    private int hdlCholestrol;
+    private int totalCholestrol;
     private double cholRiskScore;
     private double ldlRiskScore;
 
@@ -39,15 +39,7 @@ public class VitalSign {
 
    
 
-    public double getLDLriskScore() {
-        return LDLriskScore;
-    }
-
-    public void setLDLriskScore(double LDLriskScore) {
-        this.LDLriskScore = LDLriskScore;
-    }
-    private double LDLriskScore;
-
+   
     public Date getCreatedOn() {
         return createdOn;
     }
@@ -82,22 +74,24 @@ public class VitalSign {
         this.bloodPressure = bloodPressure;
     }
 
-    public double getHdlCholestrol() {
+    public int getHdlCholestrol() {
         return hdlCholestrol;
     }
 
-    public void setHdlCholestrol(double hdlCholestrol) {
+    public void setHdlCholestrol(int hdlCholestrol) {
         this.hdlCholestrol = hdlCholestrol;
     }
 
-    public double getTotalCholestrol() {
+    public int getTotalCholestrol() {
         return totalCholestrol;
     }
 
-    public void setTotalCholestrol(double totalCholestrol) {
+    public void setTotalCholestrol(int totalCholestrol) {
         this.totalCholestrol = totalCholestrol;
     }
 
+   
+   
    
     
 }

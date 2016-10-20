@@ -12,18 +12,31 @@ import java.util.ArrayList;
  * @author Rishabh
  */
 public class City {
-    private ArrayList<CommunityDirectory> city;
-    
-    public City(){
-        city=new ArrayList<CommunityDirectory>();
+    private ArrayList<CommunityDirectory> communityList;
+    private String cityName;
+
+    public City() {
+        this.communityList = new ArrayList<>();
     }
 
-    public ArrayList<CommunityDirectory> getCity() {
-        return city;
+    public ArrayList<CommunityDirectory> getCommunityList() {
+        return communityList;
     }
 
-    public void setCity(ArrayList<CommunityDirectory> city) {
-        this.city = city;
+    public void setCommunityList(ArrayList<CommunityDirectory> communityList) {
+        this.communityList = communityList;
     }
     
+   
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
+     public void addCommunityDir(CommunityDirectory c){
+      communityList.add(c);
+    }
 }

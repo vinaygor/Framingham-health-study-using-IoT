@@ -26,5 +26,8 @@ public class CommunityDirectory {
         this.communityDirectory = communityDirectory;
     }
     
+    public void addCommunity(Community c){
+      communityDirectory.add(c);
+    }
     
 }

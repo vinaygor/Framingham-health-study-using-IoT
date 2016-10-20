@@ -13,13 +13,13 @@ import java.util.ArrayList;
  */
 public class Community {
     private String communityName;
-    private ArrayList<House> housedirectory;
+    private HouseDirectory houseDirectory;
     private float Temperature;
     private float pollutionLevel;
 
     public Community()
     {
-        this.housedirectory = new ArrayList<House>();
+      //  this.housedirectory = new ArrayList<House>();
     }
     
     public String getCommunityName() {
@@ -30,13 +30,15 @@ public class Community {
         this.communityName = communityName;
     }
 
-    public ArrayList<House> getHousedirectory() {
-        return housedirectory;
+    public HouseDirectory getHouseDirectory() {
+        return houseDirectory;
     }
 
-    public void setHousedirectory(ArrayList<House> housedirectory) {
-        this.housedirectory = housedirectory;
+    public void setHouseDirectory(HouseDirectory houseDirectory) {
+        this.houseDirectory = houseDirectory;
     }
+
+    
 
     
 

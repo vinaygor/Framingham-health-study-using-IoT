@@ -11,7 +11,16 @@ package Business;
  */
 public class House {
     
+    private int houseId;
     private FamilyDirectory familyDirectory;
+
+    public int getHouseId() {
+        return houseId;
+    }
+
+    public void setHouseId(int houseId) {
+        this.houseId = houseId;
+    }
     
     public House()
     {
