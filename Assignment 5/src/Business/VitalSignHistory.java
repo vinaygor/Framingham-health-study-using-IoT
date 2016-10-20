@@ -6,6 +6,7 @@
 package Business;
 
 import java.util.ArrayList;
+import static jdk.nashorn.internal.objects.NativeMath.round;
 
 /**
  *
@@ -13,6 +14,8 @@ import java.util.ArrayList;
  */
 public class VitalSignHistory {
     private ArrayList<VitalSign> vitalSignHistory;
+    private double avgLdlRiskScore;
+    private double  avgCholRiskScore;
     
     public VitalSignHistory(){
         vitalSignHistory=new ArrayList<VitalSign>();
@@ -32,4 +35,22 @@ public class VitalSignHistory {
         vitalSignHistory.add(vitalSign);
         return vitalSign;
     }
+
+    public double getAvgLdlRiskScore() {
+        return avgLdlRiskScore;
+    }
+
+    public void setAvgLdlRiskScore(double avgLdlRiskScore) {
+        this.avgLdlRiskScore = avgLdlRiskScore;
+    }
+
+    public double getAvgCholRiskScore() {
+        return avgCholRiskScore;
+    }
+
+    public void setAvgCholRiskScore(double avgCholRiskScore) {
+        this.avgCholRiskScore = avgCholRiskScore;
+    }
+    
+    
 }

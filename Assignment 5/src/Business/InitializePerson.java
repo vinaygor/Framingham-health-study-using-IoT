@@ -80,11 +80,18 @@ public class InitializePerson {
             person.setName(name);
             int n = randInt(80,100);
             person.setAge(n);
-            n = randInt(40,100);
+            person.setPatient(rand.nextBoolean());
+            
             person.setGender("Male");
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+                       
+            if(person.isPatient()){
+                vsh.setAvgCholRiskScore(vsh.getAvgCholRiskScore()+1.0);
+                vsh.setAvgLdlRiskScore(vsh.getAvgLdlRiskScore()+1.0);
+            }
             person.setVitalSignHistory(vsh);
             grandFather.addPerson(person);
+            personDirectory.addPerson(person);
         }
         
         for (int i = 0; i < 300; i++) {
@@ -96,11 +103,17 @@ public class InitializePerson {
             person.setName(name);
             int n = randInt(80,100);
             person.setAge(n);
-            n = randInt(40,100);
+            person.setPatient(rand.nextBoolean());
             person.setGender("Female");
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
+            if(person.isPatient()){
+                vsh.setAvgCholRiskScore(vsh.getAvgCholRiskScore()+1.0);
+                vsh.setAvgLdlRiskScore(vsh.getAvgLdlRiskScore()+1.0);
+            }
+            
             person.setVitalSignHistory(vsh);
             grandMother.addPerson(person);
+            personDirectory.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
@@ -109,23 +122,47 @@ public class InitializePerson {
             String name = generateString(rand, myCharacters, 4);
             person.setName(name);
             int n = randInt(40,70);
+            double hereditoryRiskScore=0.5;
+            double ldlRiskScore=0.0;
+            double cholRiskScore=0.0;
+            
             person.setAge(n);
-            n = randInt(40,100);
+            
             person.setGender("Male");
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
             person.setVitalSignHistory(vsh);
+            ldlRiskScore = vsh.getAvgLdlRiskScore();
+            cholRiskScore = vsh.getAvgCholRiskScore();
             
             int index = rand.nextInt(grandFather.getPersonDirectory().size());
             Person temp= grandFather.getPersonDirectory().get(index);
+            boolean isPatient = temp.isPatient();
+            if(isPatient)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditoryRiskScore;
+                cholRiskScore = cholRiskScore+ hereditoryRiskScore;
+            }
+            
             person.setFather(temp);
             grandFather.getPersonDirectory().remove(index);
             
             int index1 = rand.nextInt(grandMother.getPersonDirectory().size());
             Person temp1= grandMother.getPersonDirectory().get(index);
+            boolean isPatient2=temp1.isPatient();
+            if(isPatient2)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditoryRiskScore;
+                cholRiskScore = cholRiskScore+ hereditoryRiskScore;
+            }
+            ldlRiskScore = Math.round(ldlRiskScore*100D)/100D;
+            cholRiskScore = Math.round(cholRiskScore*100D)/100D;
+            vsh.setAvgLdlRiskScore(ldlRiskScore);
+            vsh.setAvgCholRiskScore(cholRiskScore);
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
             
             father.addPerson(person);
+            personDirectory.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
@@ -135,22 +172,44 @@ public class InitializePerson {
             person.setName(name);
             int n = randInt(40,70);
             person.setAge(n);
-            n = randInt(40,100);
+            double hereditoryRiskScore=0.5;
+            double ldlRiskScore=0.0;
+            double cholRiskScore=0.0;
+            
             person.setGender("Female");
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
             person.setVitalSignHistory(vsh);
+            ldlRiskScore = vsh.getAvgLdlRiskScore();
+            cholRiskScore = vsh.getAvgCholRiskScore();
             
             int index = rand.nextInt(grandFather.getPersonDirectory().size());
             Person temp= grandFather.getPersonDirectory().get(index);
+            boolean isPatient = temp.isPatient();
+            if(isPatient)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditoryRiskScore;
+                cholRiskScore = cholRiskScore+ hereditoryRiskScore;
+            }
             person.setFather(temp);
             grandFather.getPersonDirectory().remove(index);
             
             int index1 = rand.nextInt(grandMother.getPersonDirectory().size());
             Person temp1= grandMother.getPersonDirectory().get(index);
+            boolean isPatient2=temp1.isPatient();
+            if(isPatient2)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditoryRiskScore;
+                cholRiskScore = cholRiskScore+ hereditoryRiskScore;
+            }
+            ldlRiskScore = Math.round(ldlRiskScore*100D)/100D;
+            cholRiskScore = Math.round(cholRiskScore*100D)/100D;
+            vsh.setAvgLdlRiskScore(ldlRiskScore);
+            vsh.setAvgCholRiskScore(cholRiskScore);
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
             
             mother.addPerson(person);
+            personDirectory.addPerson(person);
         }
         
         for (int i = 0; i < 150; i++) {
@@ -165,7 +224,10 @@ public class InitializePerson {
             int n = randInt(20,40);
             person.setAge(n);
             
-            n = randInt(40,100);
+            double hereditory1=0.5;
+            double hereditory2=0.2;
+            double ldlRiskScore=0.0;
+            double cholRiskScore=0.0; 
             
             
             int genderSelect = rand.nextInt(gender.length);
@@ -173,18 +235,33 @@ public class InitializePerson {
             
             VitalSignHistory vsh = initVitalSign(person.getGender(),person.getAge());
             person.setVitalSignHistory(vsh);
+            ldlRiskScore = vsh.getAvgLdlRiskScore();
+            cholRiskScore = vsh.getAvgCholRiskScore();
             
             int index = rand.nextInt(father.getPersonDirectory().size());
             Person temp= father.getPersonDirectory().get(index);
+            boolean isPatient = temp.isPatient();
+            if(isPatient)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditory1;
+                cholRiskScore = cholRiskScore+ hereditory1;
+            }
             person.setFather(temp);
             father.getPersonDirectory().remove(index);
             
             
             int index1 = rand.nextInt(mother.getPersonDirectory().size());
             Person temp1= mother.getPersonDirectory().get(index);
+            boolean isPatient2=temp1.isPatient();
+            if(isPatient2)
+            {
+                ldlRiskScore = ldlRiskScore+ hereditory1;
+                cholRiskScore = cholRiskScore+ hereditory1;
+            }
             person.setMother(temp1);
             mother.getPersonDirectory().remove(index1);
             child.addPerson(person);
+            personDirectory.addPerson(person);
             
             //Adding family members starting from children
             Family family = new Family();
@@ -201,15 +278,45 @@ public class InitializePerson {
                 //Adding Father's Parents
                 if(!person.getFather().getFather().equals(null) && !person.getFather().getMother().equals(null)){
                     family.getPersonDirectory().addPerson(person.getFather().getFather());
+                    boolean isPatient3 = person.getFather().getFather().isPatient();
+                    if(isPatient3)
+                    {
+                       ldlRiskScore = ldlRiskScore+ hereditory2;
+                       cholRiskScore = cholRiskScore+ hereditory2; 
+                    }
                     family.getPersonDirectory().addPerson(person.getFather().getMother());
+                    boolean isPatient4 = person.getFather().getMother().isPatient();
+                    if(isPatient4)
+                    {
+                       ldlRiskScore = ldlRiskScore+ hereditory2;
+                       cholRiskScore = cholRiskScore+ hereditory2; 
+                    }
                 }
                 
                 //Adding Mother's Parents
                 if(!person.getMother().getFather().equals(null) && !person.getMother().getMother().equals(null)){
                     family.getPersonDirectory().addPerson(person.getMother().getFather());
+                    boolean isPatient5 = person.getMother().getFather().isPatient();
+                    if(isPatient5)
+                    {
+                       ldlRiskScore = ldlRiskScore+ hereditory2;
+                       cholRiskScore = cholRiskScore+ hereditory2; 
+                    }
+                    
                     family.getPersonDirectory().addPerson(person.getMother().getMother());
+                    boolean isPatient6 = person.getMother().getMother().isPatient();
+                    if(isPatient6)
+                    {
+                       ldlRiskScore = ldlRiskScore+ hereditory2;
+                       cholRiskScore = cholRiskScore+ hereditory2; 
+                    }
+                    
                 }
             }
+            ldlRiskScore = Math.round(ldlRiskScore*100D)/100D;
+            cholRiskScore = Math.round(cholRiskScore*100D)/100D;
+            vsh.setAvgLdlRiskScore(ldlRiskScore);
+            vsh.setAvgCholRiskScore(cholRiskScore);
             
             familyDirectory.addfamily(family);
             house.setFamilyDirectory(familyDirectory);
@@ -248,7 +355,7 @@ public class InitializePerson {
             }                
             
             
-            
+            System.out.println("Person Directory size :"+personDirectory.getPersonDirectory().size()); 
             
          for(Family f : familyDirectory.getFamilyDirectory()){
              System.out.println("");
@@ -270,8 +377,8 @@ public class InitializePerson {
              System.out.println("HDL colestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
              System.out.println("Total Cholestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getTotalCholestrol());
              System.out.println("");
-             System.out.println("LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getLdlRiskScore());
-             System.out.println("HDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
+             System.out.println("Average Cholestrol Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgCholRiskScore());
+             System.out.println("Average LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgLdlRiskScore());
              System.out.println("______________________________________________________");
          }
          
@@ -297,7 +404,8 @@ public class InitializePerson {
         
         Random random = new Random();
         VitalSignHistory vsh = new VitalSignHistory();
-        
+        double avgLdlRiskScore=0.0;
+        double avgCholRiskScore=0.0;
         
         for(int i=0;i<5;i++){
         VitalSign vitalSign = new VitalSign();
@@ -341,7 +449,13 @@ public class InitializePerson {
         //    vitalSign.setRiskScore(riskScore);
         }
         vsh.addVitalSign(vitalSign);
+        avgLdlRiskScore = avgLdlRiskScore + vitalSign.getLdlRiskScore();
+        avgCholRiskScore = avgCholRiskScore + vitalSign.getCholRiskScore();
         }
+        avgLdlRiskScore=avgLdlRiskScore/5;
+        avgCholRiskScore=avgCholRiskScore/5;
+        vsh.setAvgLdlRiskScore(avgLdlRiskScore);
+        vsh.setAvgCholRiskScore(avgCholRiskScore);
         return vsh;
     }
 }
