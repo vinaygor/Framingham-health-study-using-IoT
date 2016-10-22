@@ -15,7 +15,6 @@ public class Person {
     private int age;
     private String Gender;
     private boolean patient;
-    private boolean financialIssues;
     private VitalSignHistory vitalSignHistory;
     private Person mother;
     private Person father;
@@ -68,13 +67,6 @@ public class Person {
     }
 
 
-    public boolean isFinancialIssues() {
-        return financialIssues;
-    }
-
-    public void setFinancialIssues(boolean financialIssues) {
-        this.financialIssues = financialIssues;
-    }
 
     public VitalSignHistory getVitalSignHistory() {
         return vitalSignHistory;
