@@ -6,6 +6,7 @@
 package Interface;
 
 import Business.InitializePerson;
+import java.awt.CardLayout;
 
 /**
  *
@@ -33,7 +34,7 @@ public class MainJFrame extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         consoleBtn = new javax.swing.JButton();
         calculateRiskBtn = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
+        userProcessContainer = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -48,6 +49,11 @@ public class MainJFrame extends javax.swing.JFrame {
         });
 
         calculateRiskBtn.setText("Calculate Risk Score");
+        calculateRiskBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                calculateRiskBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -55,9 +61,9 @@ public class MainJFrame extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(consoleBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(calculateRiskBtn))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(consoleBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE)
+                    .addComponent(calculateRiskBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -72,14 +78,14 @@ public class MainJFrame extends javax.swing.JFrame {
 
         jSplitPane3.setLeftComponent(jPanel3);
 
-        jPanel4.setLayout(new java.awt.CardLayout());
+        userProcessContainer.setLayout(new java.awt.CardLayout());
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 20)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome to Framingham Heart Study");
-        jPanel4.add(jLabel1, "card2");
+        userProcessContainer.add(jLabel1, "card2");
 
-        jSplitPane3.setRightComponent(jPanel4);
+        jSplitPane3.setRightComponent(userProcessContainer);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,6 +106,14 @@ public class MainJFrame extends javax.swing.JFrame {
         InitializePerson initializePerson = new InitializePerson();
     initializePerson.initPersonDirectory();
     }//GEN-LAST:event_consoleBtnActionPerformed
+
+    private void calculateRiskBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_calculateRiskBtnActionPerformed
+        // TODO add your handling code here:
+        Input input=new Input(userProcessContainer);
+        userProcessContainer.add("Input",input);
+CardLayout layout=(CardLayout)userProcessContainer.getLayout();
+layout.next(userProcessContainer);
+    }//GEN-LAST:event_calculateRiskBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,17 +151,11 @@ public class MainJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAdmin;
-    private javax.swing.JButton btnAdmin1;
     private javax.swing.JButton calculateRiskBtn;
     private javax.swing.JButton consoleBtn;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JSplitPane jSplitPane1;
-    private javax.swing.JSplitPane jSplitPane2;
     private javax.swing.JSplitPane jSplitPane3;
+    private javax.swing.JPanel userProcessContainer;
     // End of variables declaration//GEN-END:variables
 }
