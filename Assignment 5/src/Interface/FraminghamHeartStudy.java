@@ -12,9 +12,9 @@ import Business.InitializePerson;
  * @author vinay
  */
 public class FraminghamHeartStudy {
-    public static void main(String a[]){
+   // public static void main(String a[]){
         
-    InitializePerson initializePerson = new InitializePerson();
-    initializePerson.initPersonDirectory();
-    }
+    //InitializePerson initializePerson = new InitializePerson();
+    //initializePerson.initPersonDirectory();
+ //   }
 }
