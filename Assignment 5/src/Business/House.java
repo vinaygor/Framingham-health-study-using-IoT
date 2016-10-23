@@ -5,6 +5,8 @@
  */
 package Business;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author ayush
@@ -12,7 +14,7 @@ package Business;
 public class House {
     
     private int houseId;
-    private FamilyDirectory familyDirectory;
+    private ArrayList<Family> family;
 
     public int getHouseId() {
         return houseId;
@@ -24,15 +26,22 @@ public class House {
     
     public House()
     {
-        this.familyDirectory = new FamilyDirectory();
+        this.family = new ArrayList<Family>();
     }
 
-    public FamilyDirectory getFamilyDirectory() {
-        return familyDirectory;
+    public ArrayList<Family> getFamily() {
+        return family;
     }
 
-    public void setFamilyDirectory(FamilyDirectory familyDirectory) {
-        this.familyDirectory = familyDirectory;
+    public void setFamily(ArrayList<Family> family) {
+        this.family = family;
     }
+    
+    public void add(Family family)
+    {
+        this.family.add(family);
+    }
+
+    
     
 }

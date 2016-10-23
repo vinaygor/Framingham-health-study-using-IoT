@@ -9,6 +9,7 @@ import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import com.sun.prism.impl.BaseMesh;
 import java.sql.Timestamp;
 import java.util.Random;
+import java.util.Scanner;
 
 /**
  *
@@ -22,11 +23,11 @@ public class InitializePerson {
     
     
     
-    public static long offset = Timestamp.valueOf("2012-01-01 00:00:00").getTime();
-    public static long end = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
+    public static long offset = Timestamp.valueOf("2015-01-01 00:00:00").getTime();
+    public static long end = Timestamp.valueOf("2015-12-31 00:00:00").getTime();
     
     
-    public static String generateString(Random rng, String characters, int length) {
+    public  String generateString(Random rng, String characters, int length) {
         char[] text = new char[length];
         for (int i = 0; i < length; i++) {
             text[i] = characters.charAt(rng.nextInt(characters.length()));
@@ -34,7 +35,7 @@ public class InitializePerson {
         return new String(text);
     }
     
-    public static int randInt(int min, int max) {
+    public int randInt(int min, int max) {
 
         // Usually this can be a field rather than a method variable
         Random rand = new Random();
@@ -44,7 +45,7 @@ public class InitializePerson {
         return randomNum;
     }
     
-    public static PersonDirectory initPersonDirectory() {
+    public  PersonDirectory initPersonDirectory() {
         PersonDirectory personDirectory = new PersonDirectory();
         PersonDirectory grandFather = new PersonDirectory();
         PersonDirectory grandMother = new PersonDirectory();
@@ -65,7 +66,7 @@ public class InitializePerson {
         community2.setPollutionLevel(29);
         community2.setTemperature(69);
         
-        FamilyDirectory familyDirectory = new FamilyDirectory();
+        
         Random rand = new Random();
 
         //There are two ways presented in here for random string generation you can use whatever you feel is right.
@@ -211,11 +212,16 @@ public class InitializePerson {
             mother.addPerson(person);
             personDirectory.addPerson(person);
         }
-        
-        for (int i = 0; i < 150; i++) {
+        House house=null;
+        for (int i = 1; i < 151; i++) {
             Person person = new Person();
-            House house = new House();
             
+            if(i%10==1)
+            {
+                house = new House();
+                house.setHouseId(houseID++);
+                houseDirectory.addHouse(house);
+            }
             person.setPersonId(Integer.toString(personID++));
             
             String name = generateString(rand, myCharacters, 3);
@@ -318,10 +324,8 @@ public class InitializePerson {
             vsh.setAvgLdlRiskScore(ldlRiskScore);
             vsh.setAvgCholRiskScore(cholRiskScore);
             
-            familyDirectory.addfamily(family);
-            house.setFamilyDirectory(familyDirectory);
-            house.setHouseId(houseID++);
-            houseDirectory.addHouse(house);
+           house.add(family);
+            
                        
         }
         int count =0;
@@ -345,43 +349,166 @@ public class InitializePerson {
         city.addCommunityDir(communityDirectory);
         city.setCityName("Boston");
         
-        try{
+        
+        System.out.println("Welcome Framingham Heart Study ");
+        Scanner s = new Scanner(System.in);
+        while(true)
+        {
+            System.out.println("**********************************************");
+            System.out.println("1. City Level Report");
+            System.out.println("2. Community Level Report");
+            System.out.println("3. House Level Report");
+            System.out.println("4. Family Level Report");
+            System.out.println("5. Person Report");
+            System.out.println("6. Exit");
+            System.out.println("Enter the choice:");
+            int n = s.nextInt();
+        
+            switch(n)
+            {
+                case 1:
+                            int pCount=0,maleCount=0,femaleCount=0;
+                            
+                            System.out.println("City Name :"+city.getCityName());
+                          
+                            for ( Person p : personDirectory.getPersonDirectory())
+                            {
+                                if(p.getVitalSignHistory().getAvgLdlRiskScore()>10&&p.getVitalSignHistory().getAvgCholRiskScore()>10)
+                                {    pCount++;
+                                if(p.getGender().equals("Male"))
+                                    maleCount++;
+                                else
+                                    femaleCount++;
+                                }
+                            }
+                            System.out.println("Number of people having risk of getting heart disease : "+pCount);
+                            System.out.println("----------------------------------------------");
+                            System.out.println("Displaying details based on Gender");
+                            System.out.println("Total number of Males at Risk : "+maleCount);
+                            System.out.println("Total number of Females at Risk : "+femaleCount);
+                            System.out.println("----------------------------------------------");
+                            double percentage = Math.round(((pCount*100d)/(personDirectory.getPersonDirectory().size()*100d))*100D)/100D;
+                            System.out.println("Overall risk  percentage of people at city Level :"+percentage*100 +"%");
+                            System.out.println("----------------------------------------------");
+                break;
+                case 2:            
+                    for(Community community: communityDirectory.getCommunityDirectory()){
+                        System.out.println("Community Name : "+community.getCommunityName());
+                        double avgldlRiskCommunity=0,avgcholRiskCommunity=0;
+                        int personCommunityCount=0;
+                       HouseDirectory hd =community.getHouseDirectory();
+                       for(House communityHouse :hd.getHousedirectory() ){
+                           for(Family family :communityHouse.getFamily()){
+                               for(Person communityPerson : family.getPersonDirectory().getPersonDirectory())
+                               {
+                                   personCommunityCount++;
+                                   avgldlRiskCommunity = avgldlRiskCommunity +communityPerson.getVitalSignHistory().getAvgLdlRiskScore();
+                                   avgcholRiskCommunity = avgcholRiskCommunity +communityPerson.getVitalSignHistory().getAvgCholRiskScore();
+                                   
+                               }
+                           }
+                       }
+                       avgldlRiskCommunity =Math.round((avgldlRiskCommunity/personCommunityCount)*100D)/100D;
+                       avgcholRiskCommunity = Math.round((avgcholRiskCommunity/personCommunityCount)*100D)/100D;
+                       System.out.println("Average Ldl risk before change in pollution level :" +avgldlRiskCommunity);
+                       System.out.println("Average Cholestrol risk before change in pollution level :" +avgcholRiskCommunity);
+                        System.out.println("_________________________________________");
+                       System.out.println("Enter the new pollution level (1-3...increasing order)");
+                        int input =s.nextInt();
+                        if(input<4 && input>0){
+                            avgldlRiskCommunity = avgldlRiskCommunity + (input*1.5);
+                            avgcholRiskCommunity = avgcholRiskCommunity+(input*1.5);
+                            community.setPollutionLevel(input);
+                            System.out.println("Average Ldl risk After change in pollution level :" +avgldlRiskCommunity);
+                       System.out.println("Average Cholestrol risk After change in pollution level :" +avgcholRiskCommunity);
+                        System.out.println("_________________________________________");
+                        }
+                        else
+                            System.out.println("Value is incorrect !");
+                    }
+                        for(Community comm: communityDirectory.getCommunityDirectory()){
+                        System.out.println("Community Name : "+comm.getCommunityName());
+                        double averageNumber=0;
+                        int personAgeGroupCount=0,personAgeGroupRisk=0;
+                       HouseDirectory houseDir =comm.getHouseDirectory();
+                       for(House communityHouse :houseDir.getHousedirectory() ){
+                           for(Family family :communityHouse.getFamily()){
+                               for(Person communityPerson : family.getPersonDirectory().getPersonDirectory())
+                               {
+                                   if(communityPerson.getAge()>40 && communityPerson.getAge()<80){
+                                       personAgeGroupCount++;
+                                   if(communityPerson.getVitalSignHistory().getAvgLdlRiskScore()>10 && communityPerson.getVitalSignHistory().getAvgCholRiskScore()>10)
+                                       personAgeGroupRisk++;
+                                   
+                               }
+                           }
+                       }
+                        }
+                            System.out.println("___________________________________________");
+                            System.out.println("Number of people at age group (41-79) : "+personAgeGroupCount);
+                            System.out.println("Number of people at Risk for age group (41-79) : "+personAgeGroupRisk);
+                            System.out.println("___________________________________________");
+                           }
+                       
+                    break;
+                    
+                case 3:
+                    
+                    for(Community comm: communityDirectory.getCommunityDirectory()){
+                        System.out.println("Community Name : "+comm.getCommunityName());
+                        double averageNumber=0;
+                        int personAgeGroupCount=0,personAgeGroupRisk=0;
+                       HouseDirectory houseDir =comm.getHouseDirectory();
+                       for(House communityHouse :houseDir.getHousedirectory() ){
+                           for(Family family :communityHouse.getFamily()){
+                               
+                               for(Person communityPerson : family.getPersonDirectory().getPersonDirectory())
+                               {
+                                   if(communityPerson.getAge()>40 && communityPerson.getAge()<80){
+                                       personAgeGroupCount++;
+                                   if(communityPerson.getVitalSignHistory().getAvgLdlRiskScore()>10 && communityPerson.getVitalSignHistory().getAvgCholRiskScore()>10)
+                                       personAgeGroupRisk++;
+                                   
+                               }
+                           }
+                       }
+                        }
+                            System.out.println("___________________________________________");
+                            System.out.println("Number of people at age group (41-79) : "+personAgeGroupCount);
+                            System.out.println("Number of people at Risk for age group (41-79) : "+personAgeGroupRisk);
+                            System.out.println("___________________________________________");
+                           }
+                    break;
+//                
+//            }              
             
-            System.out.println("City Name :"+city.getCityName());
+//            System.out.println("Person Directory size :"+personDirectory.getPersonDirectory().size()); 
             
-            for(CommunityDirectory community: city.getCommunityList()){
-                System.out.println("City Community "+community.getCommunityDirectory().size());
-                
-            }                
-            
-            
-            System.out.println("Person Directory size :"+personDirectory.getPersonDirectory().size()); 
-            
-         for(Family f : familyDirectory.getFamilyDirectory()){
-             System.out.println("");
-            System.out.println("Family Name "+f.getFamilyId());
-            System.out.println("Family Members count "+f.getPersonDirectory().getPersonDirectory().size());
-            System.out.println("Child's Person ID "+f.getPersonDirectory().getPersonDirectory().get(0).getPersonId());
-            System.out.println("Child Name : "+ f.getPersonDirectory().getPersonDirectory().get(0).getName());
-            System.out.println("Child's Father Name : "+ f.getPersonDirectory().getPersonDirectory().get(1).getName());
-            System.out.println("Child's Mother Name : "+ f.getPersonDirectory().getPersonDirectory().get(2).getName());
-            System.out.println("-----------------------------------------------------------------");
-            System.out.println("Child's Vital Details");
-            System.out.println("*************************************");
-             System.out.println();
-             System.out.println("Gender :"+f.getPersonDirectory().getPersonDirectory().get(0).getGender());
-             System.out.println("Child's Age :"+f.getPersonDirectory().getPersonDirectory().get(0).getAge());
-             System.out.println("Diabetes :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isDiabetes());
-             System.out.println("Smoker :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isSmoker());
-             System.out.println("Blood Pressure :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getBloodPressure());
-             System.out.println("HDL colestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
-             System.out.println("Total Cholestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getTotalCholestrol());
-             System.out.println("");
-             System.out.println("Average Cholestrol Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgCholRiskScore());
-             System.out.println("Average LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgLdlRiskScore());
-             System.out.println("______________________________________________________");
-         }
-         
+//         for(Family f : familyDirectory.getFamilyDirectory()){
+//             System.out.println("");
+//            System.out.println("Family Name "+f.getFamilyId());
+//            System.out.println("Family Members count "+f.getPersonDirectory().getPersonDirectory().size());
+//            System.out.println("Child's Person ID "+f.getPersonDirectory().getPersonDirectory().get(0).getPersonId());
+//            System.out.println("Child Name : "+ f.getPersonDirectory().getPersonDirectory().get(0).getName());
+//            System.out.println("Child's Father Name : "+ f.getPersonDirectory().getPersonDirectory().get(1).getName());
+//            System.out.println("Child's Mother Name : "+ f.getPersonDirectory().getPersonDirectory().get(2).getName());
+//            System.out.println("-----------------------------------------------------------------");
+//            System.out.println("Child's Vital Details");
+//            System.out.println("*************************************");
+//             System.out.println();
+//             System.out.println("Gender :"+f.getPersonDirectory().getPersonDirectory().get(0).getGender());
+//             System.out.println("Child's Age :"+f.getPersonDirectory().getPersonDirectory().get(0).getAge());
+//             System.out.println("Diabetes :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isDiabetes());
+//             System.out.println("Smoker :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isSmoker());
+//             System.out.println("Blood Pressure :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getBloodPressure());
+//             System.out.println("HDL colestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
+//             System.out.println("Total Cholestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getTotalCholestrol());
+//             System.out.println("");
+//             System.out.println("Average Cholestrol Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgCholRiskScore());
+//             System.out.println("Average LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgLdlRiskScore());
+//             System.out.println("______________________________________________________");
+//         }
+        
          
 //        
 //        Person temp = child.getPersonDirectory().get(0);
@@ -393,14 +520,13 @@ public class InitializePerson {
 //        System.out.println("Child Gender 2: "+child.getPersonDirectory().get(1).getGender());
 //        
         }
-        catch(Exception e){
-            
-        }
+        
         return personDirectory;
-
-    }
+  //  }
+}}
     
-    public static VitalSignHistory initVitalSign(String gender,int age){
+    
+    public  VitalSignHistory initVitalSign(String gender,int age){
         
         Random random = new Random();
         VitalSignHistory vsh = new VitalSignHistory();

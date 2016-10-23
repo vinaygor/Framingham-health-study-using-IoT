@@ -143,8 +143,8 @@ public class CalculateWomen {
     }
     
     public int cholRiskPercentage(VitalSign vitalSign){
-        double cholRiskScore=vitalSign.getCholRiskScore();
-        NavigableMap<Double,Integer> chdCholRiskPercentageMap =new TreeMap<Double, Integer>();
+   double cholRiskScore=vitalSign.getCholRiskScore();
+   NavigableMap<Double,Integer> chdCholRiskPercentageMap =new TreeMap<Double, Integer>();
    chdCholRiskPercentageMap.put(-17.0,1);
    chdCholRiskPercentageMap.put(-1.0,2);
    chdCholRiskPercentageMap.put(0.0,2);
