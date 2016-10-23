@@ -5,8 +5,12 @@
  */
 package Interface;
 
+import Business.CalculateMen;
+import Business.CalculateWomen;
 import Business.VitalSign;
 import com.sun.org.apache.bcel.internal.generic.Type;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import javax.swing.JPanel;
 
 /**
@@ -20,12 +24,59 @@ public class Result extends javax.swing.JPanel {
      */
     JPanel userProcessContainer;
     VitalSign vitalSign;
-    public Result(JPanel userProcessContainer,VitalSign vitalSign) {
+    int age;
+    String gender;
+    public Result(JPanel userProcessContainer,VitalSign vitalSign,int age,String gender) {
         initComponents();
         this.userProcessContainer=userProcessContainer;
         this.vitalSign=vitalSign;
+        this.age=age;
+        this.gender=gender;
         txtLdlScore.setText(String.valueOf(vitalSign.getLdlRiskScore()));
         txtCholScore.setText(String.valueOf(vitalSign.getCholRiskScore()));
+        
+         if(gender.equals("Male")){
+             NavigableMap<Integer,Integer> compareMale =new TreeMap<Integer, Integer>();
+            compareMale.put(1,3);
+            compareMale.put(30,3);
+            compareMale.put(35,5);
+            compareMale.put(40,7);
+            compareMale.put(45,11);
+            compareMale.put(50,14);
+            compareMale.put(55,16);
+            compareMale.put(60,21);
+            compareMale.put(65,25);
+            compareMale.put(70,30);
+            
+            int avgAge=compareMale.get(compareMale.floorKey(age));
+            txtCompareScore.setText(String.valueOf(avgAge));
+            CalculateMen calculateMen=new CalculateMen();
+            int ldlPercent=calculateMen.ldlRiskPercentage(vitalSign);
+            int cholPercent=calculateMen.cholRiskPercentage(vitalSign);
+            txtLdlPercentage.setText(String.valueOf(ldlPercent));
+            txtCholPercentage.setText(String.valueOf(ldlPercent));
+            
+         }else if(gender.equals("Female")){
+             NavigableMap<Integer,Integer> compareFemale =new TreeMap<Integer, Integer>();
+            compareFemale.put(1,1);
+            compareFemale.put(30,1);
+            compareFemale.put(35,1);
+            compareFemale.put(40,2);
+            compareFemale.put(45,5);
+            compareFemale.put(50,8);
+            compareFemale.put(55,12);
+            compareFemale.put(60,12);
+            compareFemale.put(65,13);
+            compareFemale.put(70,14);
+            
+            int avgAge=compareFemale.get(compareFemale.floorKey(age));
+            txtCompareScore.setText(String.valueOf(avgAge));
+            CalculateWomen calculateWomen=new CalculateWomen();
+            int ldlPercent=calculateWomen.ldlRiskPercentage(vitalSign);
+            int cholPercent=calculateWomen.cholRiskPercentage(vitalSign);
+            txtLdlPercentage.setText(String.valueOf(ldlPercent));
+            txtCholPercentage.setText(String.valueOf(ldlPercent));
+         }
     }
 
     /**
@@ -41,6 +92,12 @@ public class Result extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txtLdlScore = new javax.swing.JTextField();
         txtCholScore = new javax.swing.JTextField();
+        txtCompareScore = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtLdlPercentage = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtCholPercentage = new javax.swing.JTextField();
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("LDL Risk Score:");
@@ -48,33 +105,62 @@ public class Result extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel2.setText("Cholestrol RiskScore:");
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel3.setText("Comparitive RiskScore:");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel4.setText("LDL Risk Percentage:");
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel5.setText("Cholestrol Risk Percentage:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtLdlScore)
-                    .addComponent(txtCholScore, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE))
-                .addContainerGap(414, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtCompareScore, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLdlScore, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLdlPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(35, 35, 35)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel5))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtCholScore, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCholPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(156, 156, 156))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(68, 68, 68)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtLdlScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(txtLdlScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCholScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtCholScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(382, Short.MAX_VALUE))
+                    .addComponent(txtLdlPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtCholPercentage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtCompareScore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(344, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -82,7 +168,13 @@ public class Result extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JTextField txtCholPercentage;
     private javax.swing.JTextField txtCholScore;
+    private javax.swing.JTextField txtCompareScore;
+    private javax.swing.JTextField txtLdlPercentage;
     private javax.swing.JTextField txtLdlScore;
     // End of variables declaration//GEN-END:variables
 }

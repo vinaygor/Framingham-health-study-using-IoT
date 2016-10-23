@@ -236,7 +236,7 @@ public class Input extends javax.swing.JPanel {
          vitalSign=calculateWomen.calculateRiskScore(vitalSign, age);
           
         }
-        Result result=new Result(userProcessContainer,vitalSign);
+        Result result=new Result(userProcessContainer,vitalSign,age,gender);
         userProcessContainer.add("Result",result);
 CardLayout layout=(CardLayout)userProcessContainer.getLayout();
 layout.next(userProcessContainer);

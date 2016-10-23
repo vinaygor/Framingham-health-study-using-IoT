@@ -96,6 +96,16 @@ public class CalculateMen {
         ldlRiskScore= ldlRiskScore + smokersMap.get(smokersMap.floorKey(vitalSign.isSmoker()));
         cholRiskScore = cholRiskScore + smokersMap.get(smokersMap.floorKey(vitalSign.isSmoker()));    
             
+        
+        
+        vitalSign.setLdlRiskScore(ldlRiskScore);
+        vitalSign.setCholRiskScore(cholRiskScore);
+        
+        return vitalSign;
+    }
+    public int ldlRiskPercentage(VitalSign vitalSign){
+        double ldlRiskScore=vitalSign.getLdlRiskScore();
+        
         NavigableMap<Double,Integer> ldlRiskPercentageMap = new TreeMap<Double,Integer>();
             ldlRiskPercentageMap.put(-10.0,1);
             ldlRiskPercentageMap.put(-2.0,2);
@@ -117,6 +127,10 @@ public class CalculateMen {
             ldlRiskPercentageMap.put(14.0,56);
         int ldlRiskPercentage= ldlRiskPercentageMap.get(ldlRiskPercentageMap.floorKey(ldlRiskScore));   
             
+        return ldlRiskPercentage;
+    }
+    public int cholRiskPercentage(VitalSign vitalSign){
+        double cholRiskScore=vitalSign.getCholRiskScore();
         NavigableMap<Double,Integer> chdCholRiskPercentageMap = new TreeMap<Double,Integer>();
             chdCholRiskPercentageMap.put(-10.0,2);
             chdCholRiskPercentageMap.put(0.0,3);
@@ -135,10 +149,6 @@ public class CalculateMen {
             chdCholRiskPercentageMap.put(13.0,45);
             chdCholRiskPercentageMap.put(14.0,53);    
         int cholRiskPercentage =chdCholRiskPercentageMap.get(chdCholRiskPercentageMap.floorKey(cholRiskScore));
-        
-        vitalSign.setLdlRiskScore(ldlRiskScore);
-        vitalSign.setCholRiskScore(cholRiskScore);
-        
-        return vitalSign;
+        return cholRiskPercentage;
     }
 }
