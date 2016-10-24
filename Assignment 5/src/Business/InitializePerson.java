@@ -16,8 +16,10 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -364,20 +366,22 @@ public class InitializePerson {
         city.setCityName("Boston");
         
         
-        System.out.println("Welcome Framingham Heart Study ");
+        
         Scanner s = new Scanner(System.in);
-        while(true)
+        boolean flag=true;
+        while(flag)
         {
+            System.out.println("Welcome Framingham Heart Study ");
             System.out.println("**********************************************");
             System.out.println("1. City Level Report");
             System.out.println("2. Community Level Report");
             System.out.println("3. House Level Report");
             System.out.println("4. Family Level Report");
             System.out.println("5. Person Report");
-            System.out.println("6. Exit");
+            System.out.println("6. Back to User Input Screen");
             System.out.println("Enter the choice:");
             int n = s.nextInt();
-        
+            
             switch(n)
             {
                 case 1:
@@ -577,75 +581,86 @@ public class InitializePerson {
                             System.out.println("Name :"+personDetail.getName());
                             System.out.println("Gender :"+personDetail.getGender());
                             System.out.println("Age :"+personDetail.getAge());
+                             System.out.println("Average LDL Risk Score :"+personDetail.getVitalSignHistory().getAvgLdlRiskScore());
+                            System.out.println("Average Cholestrol Risk Score :"+personDetail.getVitalSignHistory().getAvgCholRiskScore());
                             System.out.println(personDetail.getName()+"'s Vital History Details:");
                             System.out.println("Date                        BloodPressure       Total Chol        HDL Chol      Smoker      Diabetes        Chol Risk        LDL Risk");
                             for(VitalSign vitalSign : personDetail.getVitalSignHistory().getVitalSignHistory()){
-                                System.err.println(vitalSign.getCreatedOn()+"       "+vitalSign.getBloodPressure()+"                    "+vitalSign.getTotalCholestrol()+"              "+vitalSign.getHdlCholestrol()+"        "+vitalSign.isSmoker()+"          "+vitalSign.isDiabetes()+"             "+vitalSign.getCholRiskScore()+"           "+vitalSign.getLdlRiskScore());
+                                System.out.println(vitalSign.getCreatedOn()+"       "+vitalSign.getBloodPressure()+"                    "+vitalSign.getTotalCholestrol()+"              "+vitalSign.getHdlCholestrol()+"        "+vitalSign.isSmoker()+"          "+vitalSign.isDiabetes()+"             "+vitalSign.getCholRiskScore()+"           "+vitalSign.getLdlRiskScore());
                             }
                             System.out.println("");
-                            System.out.println("Average LDL Risk Score :"+personDetail.getVitalSignHistory().getAvgLdlRiskScore());
-                            System.out.println("Average Cholestrol Risk Score :"+personDetail.getVitalSignHistory().getAvgCholRiskScore());
+                           
                             System.out.println("______________________________________________________________");
+             
                             
                             
-                        }
-                        else
-                        {
+             if(personDetail.getGender().equals("Male")){
+             NavigableMap<Integer,Integer> compareMale =new TreeMap<Integer, Integer>();
+            compareMale.put(1,3);
+            compareMale.put(30,3);
+            compareMale.put(35,5);
+            compareMale.put(40,7);
+            compareMale.put(45,11);
+            compareMale.put(50,14);
+            compareMale.put(55,16);
+            compareMale.put(60,21);
+            compareMale.put(65,25);
+            compareMale.put(70,30);
+            
+            int avgAge=compareMale.get(compareMale.floorKey(personDetail.getAge()));
+            
+            CalculateMen calculateMen=new CalculateMen();
+            int ldlPercent=calculateMen.ldlRiskPercentage(personDetail.getVitalSignHistory().getVitalSignHistory().get(4));
+            int cholPercent=calculateMen.cholRiskPercentage(personDetail.getVitalSignHistory().getVitalSignHistory().get(4));
+            System.out.println("Average percent this age group is :"+avgAge);
+            System.out.println("LDL percent for person is :"+ldlPercent);
+            
+            
+         }else if(gender.equals("Female")){
+             NavigableMap<Integer,Integer> compareFemale =new TreeMap<Integer, Integer>();
+            compareFemale.put(1,1);
+            compareFemale.put(30,1);
+            compareFemale.put(35,1);
+            compareFemale.put(40,2);
+            compareFemale.put(45,5);
+            compareFemale.put(50,8);
+            compareFemale.put(55,12);
+            compareFemale.put(60,12);
+            compareFemale.put(65,13);
+            compareFemale.put(70,14);
+            
+            int avgAge=compareFemale.get(compareFemale.floorKey(personDetail.getAge()));
+            
+            CalculateWomen calculateWomen=new CalculateWomen();
+            int ldlPercent=calculateWomen.ldlRiskPercentage(personDetail.getVitalSignHistory().getVitalSignHistory().get(4));
+            int cholPercent=calculateWomen.cholRiskPercentage(personDetail.getVitalSignHistory().getVitalSignHistory().get(4));
+             System.out.println("Average percent this age group is :"+avgAge);
+            System.out.println("LDL percent for person is :"+ldlPercent);
+            
+         }
                             
-                        }
-                    }
+       }
+                        System.out.println("");
+                       
+     }
                     
                     break;
+                    
+                case 6:
+                    flag = false;
+                    
+                default:
+                    System.out.println("Enter valid choice!");
             }
             
             
                     
-//                
-//            }              
-            
-//            System.out.println("Person Directory size :"+personDirectory.getPersonDirectory().size()); 
-            
-//         for(Family f : familyDirectory.getFamilyDirectory()){
-//             System.out.println("");
-//            System.out.println("Family Name "+f.getFamilyId());
-//            System.out.println("Family Members count "+f.getPersonDirectory().getPersonDirectory().size());
-//            System.out.println("Child's Person ID "+f.getPersonDirectory().getPersonDirectory().get(0).getPersonId());
-//            System.out.println("Child Name : "+ f.getPersonDirectory().getPersonDirectory().get(0).getName());
-//            System.out.println("Child's Father Name : "+ f.getPersonDirectory().getPersonDirectory().get(1).getName());
-//            System.out.println("Child's Mother Name : "+ f.getPersonDirectory().getPersonDirectory().get(2).getName());
-//            System.out.println("-----------------------------------------------------------------");
-//            System.out.println("Child's Vital Details");
-//            System.out.println("*************************************");
-//             System.out.println();
-//             System.out.println("Gender :"+f.getPersonDirectory().getPersonDirectory().get(0).getGender());
-//             System.out.println("Child's Age :"+f.getPersonDirectory().getPersonDirectory().get(0).getAge());
-//             System.out.println("Diabetes :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isDiabetes());
-//             System.out.println("Smoker :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).isSmoker());
-//             System.out.println("Blood Pressure :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getBloodPressure());
-//             System.out.println("HDL colestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getHdlCholestrol());
-//             System.out.println("Total Cholestrol :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getVitalSignHistory().get(0).getTotalCholestrol());
-//             System.out.println("");
-//             System.out.println("Average Cholestrol Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgCholRiskScore());
-//             System.out.println("Average LDL Risk Score :"+f.getPersonDirectory().getPersonDirectory().get(0).getVitalSignHistory().getAvgLdlRiskScore());
-//             System.out.println("______________________________________________________");
-//         }
-        
-         
-//        
-//        Person temp = child.getPersonDirectory().get(0);
-//        System.out.println("Child Name "+temp.getName());
-//        System.out.println("Father Name "+temp.getFather().getName());
-//        System.out.println("Mother Name "+temp.getMother().getName());
-//
-//        System.out.println("Child Gender 1: "+temp.getGender());
-//        System.out.println("Child Gender 2: "+child.getPersonDirectory().get(1).getGender());
-//  
-        
-        
+  
+        }
     
         return personDirectory;
   //  }
-}
+
     
     
     }
