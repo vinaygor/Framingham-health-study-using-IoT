@@ -502,8 +502,8 @@ public class InitializePerson {
                            System.out.println("");
                            System.out.println("Average LDL Risk score of all the members in the house :"+Math.round(avgldlRiskHouse)*100D/100D);
                            System.out.println("Average Cholestrol Risk score of all the members in the house :"+Math.round(avgcholRiskHouse)*100D/100D);
-                           System.out.println("Number of Smokers in House :" +communityHouse.getHouseId()+" : "+smokerCount); 
-                           System.out.println("Number of people having Diabetes in House :" +communityHouse.getHouseId()+" : "+diabetesCount); 
+                           System.out.println("Number of Smokers in House" +communityHouse.getHouseId()+" : "+smokerCount); 
+                           System.out.println("Number of people having Diabetes in House" +communityHouse.getHouseId()+" : "+diabetesCount); 
                            System.out.println("");
                            
          
@@ -640,7 +640,7 @@ public class InitializePerson {
          }
                             
        }
-                        System.out.println("");
+                       
                        
      }
                     
