@@ -6,6 +6,8 @@
 package Business;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import static jdk.nashorn.internal.objects.NativeMath.round;
 
 /**
@@ -52,5 +54,14 @@ public class VitalSignHistory {
         this.avgCholRiskScore = avgCholRiskScore;
     }
     
+    public void sortList()
+    {
+         Collections.sort(vitalSignHistory, new Comparator<VitalSign>(){
+           public int compare (VitalSign v1, VitalSign v2){
+               return v1.getCreatedOn().compareTo(v2.getCreatedOn());
+           }
+       });
+        
+    }
     
 }

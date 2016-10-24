@@ -8,8 +8,18 @@ package Business;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import com.sun.prism.impl.BaseMesh;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  *
@@ -90,6 +100,7 @@ public class InitializePerson {
                 vsh.setAvgCholRiskScore(vsh.getAvgCholRiskScore()+1.0);
                 vsh.setAvgLdlRiskScore(vsh.getAvgLdlRiskScore()+1.0);
             }
+            vsh.sortList();
             person.setVitalSignHistory(vsh);
             grandFather.addPerson(person);
             personDirectory.addPerson(person);
@@ -111,7 +122,7 @@ public class InitializePerson {
                 vsh.setAvgCholRiskScore(vsh.getAvgCholRiskScore()+1.0);
                 vsh.setAvgLdlRiskScore(vsh.getAvgLdlRiskScore()+1.0);
             }
-            
+            vsh.sortList();
             person.setVitalSignHistory(vsh);
             grandMother.addPerson(person);
             personDirectory.addPerson(person);
@@ -159,6 +170,7 @@ public class InitializePerson {
             cholRiskScore = Math.round(cholRiskScore*100D)/100D;
             vsh.setAvgLdlRiskScore(ldlRiskScore);
             vsh.setAvgCholRiskScore(cholRiskScore);
+            vsh.sortList();
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
             
@@ -206,6 +218,7 @@ public class InitializePerson {
             cholRiskScore = Math.round(cholRiskScore*100D)/100D;
             vsh.setAvgLdlRiskScore(ldlRiskScore);
             vsh.setAvgCholRiskScore(cholRiskScore);
+            vsh.sortList();
             person.setMother(temp1);
             grandMother.getPersonDirectory().remove(index1);
             
@@ -323,6 +336,7 @@ public class InitializePerson {
             cholRiskScore = Math.round(cholRiskScore*100D)/100D;
             vsh.setAvgLdlRiskScore(ldlRiskScore);
             vsh.setAvgCholRiskScore(cholRiskScore);
+            vsh.sortList();
             
            house.add(family);
             
@@ -412,7 +426,7 @@ public class InitializePerson {
                        avgcholRiskCommunity = Math.round((avgcholRiskCommunity/personCommunityCount)*100D)/100D;
                        System.out.println("Average Ldl risk before change in pollution level :" +avgldlRiskCommunity);
                        System.out.println("Average Cholestrol risk before change in pollution level :" +avgcholRiskCommunity);
-                        System.out.println("_________________________________________");
+                       System.out.println("_________________________________________");
                        System.out.println("Enter the new pollution level (1-3...increasing order)");
                         int input =s.nextInt();
                         if(input<4 && input>0){
@@ -455,30 +469,137 @@ public class InitializePerson {
                 case 3:
                     
                     for(Community comm: communityDirectory.getCommunityDirectory()){
+                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         System.out.println("Community Name : "+comm.getCommunityName());
-                        double averageNumber=0;
+                        double avgldlRiskHouse=0,avgcholRiskHouse=0;
                         int personAgeGroupCount=0,personAgeGroupRisk=0;
+                        
                        HouseDirectory houseDir =comm.getHouseDirectory();
                        for(House communityHouse :houseDir.getHousedirectory() ){
+                           System.out.println("House ID : "+communityHouse.getHouseId());
+                           int smokerCount=0,diabetesCount=0; 
                            for(Family family :communityHouse.getFamily()){
                                
-                               for(Person communityPerson : family.getPersonDirectory().getPersonDirectory())
-                               {
-                                   if(communityPerson.getAge()>40 && communityPerson.getAge()<80){
-                                       personAgeGroupCount++;
-                                   if(communityPerson.getVitalSignHistory().getAvgLdlRiskScore()>10 && communityPerson.getVitalSignHistory().getAvgCholRiskScore()>10)
-                                       personAgeGroupRisk++;
-                                   
-                               }
-                           }
+                               avgldlRiskHouse = avgldlRiskHouse + family.getAvgLdlRiskScore();
+                               avgcholRiskHouse = avgcholRiskHouse + family.getAvgCholRiskScore();
+                               for(Person p :family.getPersonDirectory().getPersonDirectory()) 
+                                {
+                                if(p.getVitalSignHistory().getVitalSignHistory().get(4).isSmoker())
+                                    smokerCount++;
+                                
+                                 if(p.getVitalSignHistory().getVitalSignHistory().get(4).isDiabetes())
+                                    diabetesCount++;
+                                }
+                               
+                              }
+                           avgldlRiskHouse =avgldlRiskHouse/communityHouse.getFamily().size();
+                           avgcholRiskHouse = avgcholRiskHouse/communityHouse.getFamily().size();
+                           System.out.println("Number of Families in house "+communityHouse.getHouseId()+ " : "+communityHouse.getFamily().size());
+                           System.out.println("");
+                           System.out.println("Average LDL Risk score of all the members in the house :"+Math.round(avgldlRiskHouse)*100D/100D);
+                           System.out.println("Average Cholestrol Risk score of all the members in the house :"+Math.round(avgcholRiskHouse)*100D/100D);
+                           System.out.println("Number of Smokers in House :" +communityHouse.getHouseId()+" : "+smokerCount); 
+                           System.out.println("Number of people having Diabetes in House :" +communityHouse.getHouseId()+" : "+diabetesCount); 
+                           System.out.println("");
+                           
+         
                        }
                         }
-                            System.out.println("___________________________________________");
-                            System.out.println("Number of people at age group (41-79) : "+personAgeGroupCount);
-                            System.out.println("Number of people at Risk for age group (41-79) : "+personAgeGroupRisk);
-                            System.out.println("___________________________________________");
-                           }
+                 
+                 
+            break;
+            
+                case 4:
+                    
+                     System.out.println("Enter Family ID to display their details: ");
+                               String familyNumber = s.next();
+                     for(Community comm: communityDirectory.getCommunityDirectory()){
+                        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        System.out.println("Community Name : "+comm.getCommunityName());
+                        double avgldlRiskHouse=0,avgcholRiskHouse=0;
+                        int personAgeGroupCount=0,personAgeGroupRisk=0;
+                        
+                       HouseDirectory houseDir =comm.getHouseDirectory();
+                      
+                       for(House communityHouse :houseDir.getHousedirectory() ){
+                           int smokerCount=0,diabetesCount=0;
+                           
+                               Person personTemp=new Person();
+                           for(Family family :communityHouse.getFamily()){
+                               if(family.getFamilyId().equals(familyNumber)){
+                                   System.out.println("_________________________________________________");
+                                   System.out.println("Family ID :"+family.getFamilyId());
+                                   System.out.println("");
+                                   System.out.println("Average Cholestrol Score :"+family.getAvgCholRiskScore());
+                                   System.out.println("Average LDL Score :"+family.getAvgLdlRiskScore());
+                                   for(Person person : family.getPersonDirectory().getPersonDirectory())
+                                   {
+                                       int num=0;
+                                       if(num==0){
+                                       personTemp = person;
+                                       num++;
+                                       }
+                                       else{
+                                           if(person.getVitalSignHistory().getAvgCholRiskScore()<personTemp.getVitalSignHistory().getAvgCholRiskScore())
+                                               personTemp=person;
+                                       }
+                                      
+                                       System.out.println("Person Name :'"+person.getName()+"'     "+"Age :"+person.getAge());
+                                       System.out.println("LDL Risk Score :"+person.getVitalSignHistory().getAvgLdlRiskScore()+"    "+"Cholestrol Risk Score :"+person.getVitalSignHistory().getAvgCholRiskScore());
+                                       
+                                   }
+                                   System.out.println("_________________________________________________");
+                                   System.out.println("Person having lowest Cholestrol level in this family is '"+personTemp.getName()+"' having Cholestrol Risk Score as "+personTemp.getVitalSignHistory().getAvgCholRiskScore());
+                               }
+                               else{
+                                   System.out.println("Sorry... we don't have that many families!!");
+                               }
+                               
+                              }
+                     
+                       }
+                        }
+                 
+                     
+                    
                     break;
+                    
+                case 5:
+                    System.out.println("_________________________________________________");
+                    System.out.println("Enter Person ID to view the details :");
+                    String personID=s.next();
+                    for(Person personDetail : personDirectory.getPersonDirectory()){
+                        
+                        if(personDetail.getPersonId().equals(personID)){
+                         
+                            System.out.println("Person Details :");
+                            System.out.println("Person ID :"+personDetail.getPersonId());
+                            System.out.println("Name :"+personDetail.getName());
+                            System.out.println("Gender :"+personDetail.getGender());
+                            System.out.println("Age :"+personDetail.getAge());
+                            System.out.println(personDetail.getName()+"'s Vital History Details:");
+                            System.out.println("Date                        BloodPressure       Total Chol        HDL Chol      Smoker      Diabetes        Chol Risk        LDL Risk");
+                            for(VitalSign vitalSign : personDetail.getVitalSignHistory().getVitalSignHistory()){
+                                System.err.println(vitalSign.getCreatedOn()+"       "+vitalSign.getBloodPressure()+"                    "+vitalSign.getTotalCholestrol()+"              "+vitalSign.getHdlCholestrol()+"        "+vitalSign.isSmoker()+"          "+vitalSign.isDiabetes()+"             "+vitalSign.getCholRiskScore()+"           "+vitalSign.getLdlRiskScore());
+                            }
+                            System.out.println("");
+                            System.out.println("Average LDL Risk Score :"+personDetail.getVitalSignHistory().getAvgLdlRiskScore());
+                            System.out.println("Average Cholestrol Risk Score :"+personDetail.getVitalSignHistory().getAvgCholRiskScore());
+                            System.out.println("______________________________________________________________");
+                            
+                            
+                        }
+                        else
+                        {
+                            
+                        }
+                    }
+                    
+                    break;
+            }
+            
+            
+                    
 //                
 //            }              
             
@@ -518,13 +639,16 @@ public class InitializePerson {
 //
 //        System.out.println("Child Gender 1: "+temp.getGender());
 //        System.out.println("Child Gender 2: "+child.getPersonDirectory().get(1).getGender());
-//        
-        }
+//  
         
+        
+    
         return personDirectory;
   //  }
-}}
+}
     
+    
+    }
     
     public  VitalSignHistory initVitalSign(String gender,int age){
         

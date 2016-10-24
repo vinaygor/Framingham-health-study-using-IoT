@@ -39,4 +39,26 @@ public class Family {
         personDirectory.addPerson(person);
         return person;
     }
+    
+    public double getAvgLdlRiskScore()
+    {
+        double avgLdlScore = 0;
+        for(Person p :this.personDirectory.getPersonDirectory())
+        {
+          avgLdlScore = avgLdlScore + p.getVitalSignHistory().getAvgLdlRiskScore();
+        }
+        avgLdlScore =avgLdlScore/this.personDirectory.getPersonDirectory().size();
+        return avgLdlScore;
+    }
+    
+    public double getAvgCholRiskScore()
+    {
+        double avgCholScore = 0;
+        for(Person p :this.personDirectory.getPersonDirectory())
+        {
+          avgCholScore = avgCholScore + p.getVitalSignHistory().getAvgCholRiskScore();
+        }
+        avgCholScore =avgCholScore/this.personDirectory.getPersonDirectory().size();
+        return avgCholScore;
+    }
 }
