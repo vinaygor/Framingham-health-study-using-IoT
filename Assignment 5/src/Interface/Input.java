@@ -187,7 +187,41 @@ public class Input extends javax.swing.JPanel {
 
     private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
         VitalSign vitalSign=new VitalSign();
-        int age=Integer.parseInt(txtAge.getText());
+        
+        try{
+            int age=Integer.parseInt(txtAge.getText());
+            int totalChol=Integer.parseInt(txtTotalChol.getText());
+            int hdlChol=Integer.parseInt(txtHdlChol.getText());
+            int systolic=Integer.parseInt(txtSystolic.getText());
+            
+            //if(buttonGroupGender.getSelection()==null||buttonGroupSmoker.getSelection()==null||
+              //      buttonGroupDiabetes.getSelection()==null){
+            
+            //JOptionPane.showMessageDialog(null,"All the fields are required");}
+            
+            if(age>=100){
+                JOptionPane.showMessageDialog(null,"Age must be less than 100");
+            }
+            else if(buttonGroupGender.getSelection()==null){
+                JOptionPane.showMessageDialog(null,"Please Select Gender");
+            }
+            else if(!(totalChol<=245 && totalChol>=195)){
+                JOptionPane.showMessageDialog(null,"Total Cholestrol range 195-245");
+            }
+            else if(!(hdlChol<=65 && hdlChol>=35)){
+                JOptionPane.showMessageDialog(null,"HDL Cholestrol range 35-65");
+            }
+            else if(buttonGroupSmoker.getSelection()==null){
+                JOptionPane.showMessageDialog(null,"Please Select Smoker Option");
+            }
+            else if(buttonGroupDiabetes.getSelection()==null){
+                JOptionPane.showMessageDialog(null,"Please Select Diabetes Option");
+            }
+            else if(!(systolic<=165 && systolic>=110)){
+                JOptionPane.showMessageDialog(null,"Systolic Blood Pressure range 110-165 ");
+            }
+            else{
+        
         String gender=null;
         if(jRadioButtonMale.isSelected()){
             gender="Male";
@@ -198,8 +232,7 @@ public class Input extends javax.swing.JPanel {
         else{
             JOptionPane.showMessageDialog(null,"Please Select Gender");
         }
-        int totalChol=Integer.parseInt(txtTotalChol.getText());
-        int hdlChol=Integer.parseInt(txtHdlChol.getText());
+        
         boolean smoker=false;
         if(jRadioButtonSmokerYes.isSelected()){
             smoker=true;
@@ -220,7 +253,7 @@ public class Input extends javax.swing.JPanel {
         else{
             JOptionPane.showMessageDialog(null,"Please Select Diabetes option");
         }
-        int systolic=Integer.parseInt(txtSystolic.getText());
+        
         
         vitalSign.setBloodPressure(systolic);
         vitalSign.setDiabetes(diabetes);
@@ -238,8 +271,12 @@ public class Input extends javax.swing.JPanel {
         }
         Result result=new Result(userProcessContainer,vitalSign,age,gender);
         userProcessContainer.add("Result",result);
-CardLayout layout=(CardLayout)userProcessContainer.getLayout();
-layout.next(userProcessContainer);
+        CardLayout layout=(CardLayout)userProcessContainer.getLayout();
+        layout.next(userProcessContainer);
+        }
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null,"Invalid Input");
+        }
 // TODO add your handling code here:
     }//GEN-LAST:event_btnSubmitActionPerformed
 
